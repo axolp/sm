@@ -1,0 +1,12 @@
+top
+pm list packages
+am start -n com.google.android.youtube/com.google.android.apps.youtube.app.WatchWhileActivity
+
+
+adb shell
+mkdir /storage/emulated/0/BatteryMatter
+touch /storage/emulated/0/BatteryMatter/data.txt
+top -b -n 1 | grep com.google.android.youtube | awk '{print $1, $6, $8, $9, $10, $11, $12}'
+top -b -n 1 | grep com.google.android.youtube | awk '{print $1, $6, $8, $9, $10, $11, $12}' >> /storage/emulated/0/BatteryMatter/data.txt
+
+
