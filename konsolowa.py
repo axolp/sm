@@ -17,7 +17,7 @@ class BatteryUsageReader:
         self.mesurments= {}
 
     def show_installed_apps(self, device_id):
-        result = subprocess.run(["C:\\Users\\janax\\OneDrive\\Pulpit\\SM\\kod\\sm\\show_installed_apps.bat", device_id], capture_output=True, text=True)
+        result = subprocess.run(["C:\\Users\\PC\\Desktop\\adb\\show_installed_apps.bat", device_id], capture_output=True, text=True)
         data= result.stdout.split("\n")
         cleaned_data= []
         for line in data:
@@ -28,7 +28,7 @@ class BatteryUsageReader:
 
     def show_devices(self):
         try:
-            result = subprocess.run(["C:\\Users\\janax\\OneDrive\\Pulpit\\SM\\kod\\sm\\show_devices.bat"], capture_output=True, text=True)
+            result = subprocess.run(["C:\\Users\\PC\\Desktop\\adb\\show_devices.bat"], capture_output=True, text=True)
             data= result.stdout.split("\n")
 
             cleaned_data= []
@@ -50,12 +50,15 @@ class BatteryUsageReader:
             for i, line in enumerate(data):
                 if process_name in line:
                     odp= data[i]
+            if odp == "":
+                cpu_usage= 0
+            else:
                 print("Output:\n", odp)
-            cpu_usage= str(data).split(" ")[4]
+                cpu_usage= str(data).split(" ")[4]
             print("cpu: ", cpu_usage)
             date= datetime.datetime.now()
           
-            mesurment= float(cpu_usage)/100 * (4+5+4)
+            mesurment= float(cpu_usage)/100 * (4+5+4) #odczyatc dane z pliku
     
             self.send_data("https://battery-metter-backend.azurewebsites.net/api/measurement/add/", date, process_name, mesurment)
 
@@ -89,7 +92,7 @@ class BatteryUsageReader:
             self._read_cpu_usage(script_path, package_name, device_id)
             time.sleep(self.frequency)
             
-bm= BatteryUsageReader('C:\\Users\\janax\\OneDrive\\Pulpit\\SM\\kod\\sm\\bm_argument.bat', "xiomi", "link to backend", 5) 
+bm= BatteryUsageReader('C:\\Users\\PC\\Desktop\\adb\\bm_argument.bat', "xiomi", "link to backend", 5) 
 bm.show_installed_apps("ZY22H23QP4")
 
 
