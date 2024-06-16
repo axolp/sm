@@ -4,7 +4,7 @@ import datetime
 import requests
 
 
-script_path = 'C:\\Users\\PC\\Desktop\\sm\\sm\\bm_argument.bat'
+script_path = 'C:\\Users\\Lorda\\Desktop\\smartbear\\2906\\smn\\sm\\bm_argument.bat'
 
 
 class BatteryUsageReader:
@@ -17,7 +17,7 @@ class BatteryUsageReader:
         self.mesurments= {}
 
     def show_installed_apps(self, device_id):
-        result = subprocess.run(["C:\\Users\\PC\\Desktop\\sm\\sm\\show_installed_apps.bat", device_id], capture_output=True, text=True)
+        result = subprocess.run(["C:\\Users\\Lorda\\Desktop\\smartbear\\2906\\smn\\sm\\show_installed_apps.bat", device_id], capture_output=True, text=True)
         data= result.stdout.split("\n")
         cleaned_data= []
         for line in data:
@@ -28,7 +28,7 @@ class BatteryUsageReader:
 
     def show_devices(self):
         try:
-            result = subprocess.run(["C:\\Users\\PC\\Desktop\\sm\\sm\\show_devices.bat"], capture_output=True, text=True)
+            result = subprocess.run(["C:\\Users\\Lorda\\Desktop\\smartbear\\2906\\smn\\sm\\show_devices.bat"], capture_output=True, text=True)
             data= result.stdout.split("\n")
 
             cleaned_data= []
@@ -92,8 +92,8 @@ class BatteryUsageReader:
             self._read_cpu_usage(script_path, package_name, device_id)
             time.sleep(self.frequency)
             
-bm= BatteryUsageReader('C:\\Users\\PC\\Desktop\\sm\\sm\\bm_argument.bat', "xiomi", "link to backend", 5) 
-bm.show_installed_apps("ZY22H23QP4")
+bm= BatteryUsageReader('C:\\Users\\Lorda\\Desktop\\smartbear\\2906\\smn\\sm\\bm_argument.bat', "xiomi", "link to backend", 5) 
+bm.show_installed_apps("RZCW81YVPMJ")
 
 
 

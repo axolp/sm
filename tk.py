@@ -1,19 +1,37 @@
 import tkinter as tk
 import subprocess
 import threading
-import datetime
+from datetime import datetime
 import time
 from tkinter import ttk
 import konsolowa as k  # Zaimportuj odpowiedni moduł
+import requests
 
-
-bm = k.BatteryUsageReader('C:\\Users\\PC\\Desktop\\sm\\sm\\bm_argument.bat', "xiomi", "link to backend", 5)
+bm = k.BatteryUsageReader('C:\\Users\\Lorda\\Desktop\\smartbear\\2906\\smn\\sm\\bm_argument.bat', "xiomi", "link to backend", 5)
 cores = 8
-alpha = 2.3
+freq = 2.3
+device_name = "Motorola"
 def read_phone_power():
     cpu_power= 3.993+5.06+4.4
+    
     #odczytac dane o procesorze z apliakcji od michala, ona zapisuje w pobranych data.txt
     return cpu_power
+
+def send_measurement(date, process_name, measurement, device_name):
+    url = "http://localhost:8000/api/measurement/add/"
+    data = {
+        "measurement_date": date.strftime("%Y-%m-%dT%H:%M:%S"), 
+        "application_name": process_name,
+        "energy_consumption": measurement,
+        "device_name": device_name
+    }
+    try:
+        response = requests.post(url, json=data)
+        response.raise_for_status()
+        print("Pomyślnie wysłano pomiar!")
+    except requests.exceptions.RequestException as e:
+        print("Wystąpił błąd podczas wysyłania pomiaru:", e)
+
 
 def thread(script_path, device_id, process_name):
     global stop_thread
@@ -27,10 +45,14 @@ def thread(script_path, device_id, process_name):
             if device_id in d:
                 cpu_usage = float(d.split(" ")[3])
         print("cpu usage: ", cpu_usage)
-        power_usage= (cpu_usage / 100) * read_phone_power()*cores*alpha
-        print("Zuzycie energi: ", power_usage, "mA")
-        date = datetime.datetime.now()
-        bm.send_data("https://battery-metter-backend.azurewebsites.net/api/measurement/add/", date, device_id, power_usage)
+        energy_usage = ((cpu_usage+0.01) / 100) * read_phone_power() * cores * freq
+        print("Zuzycie energi: ", energy_usage, "mA")
+
+    
+        date = datetime.now()  
+    
+        
+        send_measurement(date, process_name, energy_usage, device_name) 
         time.sleep(5)
     
     print("Pomiar zakonczony")
@@ -41,7 +63,7 @@ def start_thread():
     global stop_thread
     print("urucham pomiary watek")
     stop_thread = False
-    bat_thread = threading.Thread(target=thread, args=("C:\\Users\\PC\\Desktop\\sm\\sm\\bm_argument.bat", combobox1.get(), combobox.get()))
+    bat_thread = threading.Thread(target=thread, args=("C:\\Users\\Lorda\\Desktop\\smartbear\\2906\\smn\\sm\\bm_argument.bat", combobox1.get(), combobox.get()))
     bat_thread.start()  # Start wątku uruchamiającego plik .bat
 
 def stop_thread_func():
@@ -86,7 +108,7 @@ def b_start_measurement():
     text = f"Wprowadzono: , Wybrano urządzenie: {combobox.get()}, Aplikację: {combobox1.get()}"
     label.config(text=text)
     print("Rozpoczęcie pomiaru dla:", combobox1.get())
-    bm.run("C:\\Users\\PC\\Desktop\\sm\\sm\\bm_argument.bat", combobox1.get(), combobox.get())
+    bm.run("C:\\Users\\Lorda\\Desktop\\smartbear\\2906\\smn\\sm\\bm_argument.bat", combobox1.get(), combobox.get())
     #process = subprocess.Popen(["C:\\Users\\PC\\Desktop\\adb\\bm_argument.bat", combobox1.get(), combobox.get()])
 
 def b_stop_measurement():
@@ -112,7 +134,7 @@ button2 = tk.Button(root, text="Zakończ pomiary", command=stop_thread_func)
 button2.pack(pady=10)
 
 print("siemma")
-options1 = bm.show_installed_apps("ZY22H23QP4")
+options1 = bm.show_installed_apps("RZCW81YVPMJ")
 print(options1)
 
 
