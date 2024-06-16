@@ -5,5 +5,5 @@ if "%1"=="" (
     exit /b 1
 )
 
-adb -s %1 shell pm list packages
+adb -s %1 shell pm list packages -3
 
