@@ -4,7 +4,7 @@ import datetime
 import requests
 
 
-script_path = 'C:\\Users\\Lorda\\Desktop\\smartbear\\2906\\smn\\sm\\bm_argument.bat'
+script_path = 'bm_argument.bat'
 
 
 class BatteryUsageReader:
@@ -17,7 +17,7 @@ class BatteryUsageReader:
         self.mesurments= {}
 
     def show_installed_apps(self, device_id):
-        result = subprocess.run(["C:\\Users\\Lorda\\Desktop\\smartbear\\2906\\smn\\sm\\show_installed_apps.bat", device_id], capture_output=True, text=True)
+        result = subprocess.run(["show_installed_apps.bat", device_id], capture_output=True, text=True)
         data= result.stdout.split("\n")
         cleaned_data= []
         for line in data:
@@ -28,7 +28,7 @@ class BatteryUsageReader:
 
     def show_devices(self):
         try:
-            result = subprocess.run(["C:\\Users\\Lorda\\Desktop\\smartbear\\2906\\smn\\sm\\show_devices.bat"], capture_output=True, text=True)
+            result = subprocess.run(["show_devices.bat"], capture_output=True, text=True)
             data= result.stdout.split("\n")
 
             cleaned_data= []
@@ -40,7 +40,7 @@ class BatteryUsageReader:
 
         except Exception as e:
             print("Error:", e)
-
+    #nie uzywamy juz 
     def _read_cpu_usage(self, script_path, process_name, device_id):
         try:
             result = subprocess.run([script_path, process_name, device_id], capture_output=True, text=True)
@@ -54,7 +54,7 @@ class BatteryUsageReader:
                 cpu_usage= 0
             else:
                 print("Output:\n", odp)
-                cpu_usage= str(data).split(" ")[4]
+                cpu_usage= str(data).split(" ")[3]
             print("cpu: ", cpu_usage)
             date= datetime.datetime.now()
           
@@ -92,7 +92,7 @@ class BatteryUsageReader:
             self._read_cpu_usage(script_path, package_name, device_id)
             time.sleep(self.frequency)
             
-bm= BatteryUsageReader('C:\\Users\\Lorda\\Desktop\\smartbear\\2906\\smn\\sm\\bm_argument.bat', "xiomi", "link to backend", 5) 
+bm= BatteryUsageReader('bm_argument.bat', "xiomi", "link to backend", 5) 
 bm.show_installed_apps("RZCW81YVPMJ")
 
 

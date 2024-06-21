@@ -7,10 +7,14 @@ from tkinter import ttk
 import konsolowa as k  # Zaimportuj odpowiedni moduł
 import requests
 
-bm = k.BatteryUsageReader('C:\\Users\\Lorda\\Desktop\\smartbear\\2906\\smn\\sm\\bm_argument.bat', "xiomi", "link to backend", 5)
+bm = k.BatteryUsageReader('bm_argument.bat', "xiomi", "link to backend", 5)
 cores = 8
 freq = 2.3
 device_name = "Motorola"
+
+def read_frequency():
+    #odczytac dane o procesorze z apliakcji od michala, ona zapisuje w pobranych data.txt
+    return 2.3
 def read_phone_power():
     cpu_power= 3.993+5.06+4.4
     
@@ -63,24 +67,23 @@ def start_thread():
     global stop_thread
     print("urucham pomiary watek")
     stop_thread = False
-    bat_thread = threading.Thread(target=thread, args=("C:\\Users\\Lorda\\Desktop\\smartbear\\2906\\smn\\sm\\bm_argument.bat", combobox1.get(), combobox.get()))
-    bat_thread.start()  # Start wątku uruchamiającego plik .bat
+    bat_thread = threading.Thread(target=thread, args=("bm_argument.bat", combobox1.get(), combobox.get()))
+    bat_thread.start()  
 
 def stop_thread_func():
     global stop_thread
     global bat_thread
     print("zakoncz pomiary watek")
-    stop_thread = True  # Ustawienie flagi na True zatrzyma pętlę w funkcji thread
+    stop_thread = True 
     if bat_thread is not None:
-        bat_thread.join()  # Czekamy na zakończenie wątku
+        bat_thread.join()  
         bat_thread = None
 
         
-# Załóżmy, że konsolowa.BatteryUsageReader jest prawidłowo zaimplementowane
-#zmienic siezki
 
 
-# Tworzenie głównego okna
+
+
 root = tk.Tk()
 root.title("BM")
 process= None
@@ -108,7 +111,7 @@ def b_start_measurement():
     text = f"Wprowadzono: , Wybrano urządzenie: {combobox.get()}, Aplikację: {combobox1.get()}"
     label.config(text=text)
     print("Rozpoczęcie pomiaru dla:", combobox1.get())
-    bm.run("C:\\Users\\Lorda\\Desktop\\smartbear\\2906\\smn\\sm\\bm_argument.bat", combobox1.get(), combobox.get())
+    bm.run("bm_argument.bat", combobox1.get(), combobox.get())
     #process = subprocess.Popen(["C:\\Users\\PC\\Desktop\\adb\\bm_argument.bat", combobox1.get(), combobox.get()])
 
 def b_stop_measurement():
